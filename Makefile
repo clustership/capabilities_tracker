@@ -1,5 +1,5 @@
 cgroupid: cgroupid.c
-	gcc -Wall -static -o cgroupid cgroupid.c
+	gcc -Wall -o cgroupid cgroupid.c
 
 install: cgroupid
 	install -d /usr/share/containers/oci/hooks.d

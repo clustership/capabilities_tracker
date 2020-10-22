@@ -1,0 +1,33 @@
+FROM fedora:31
+
+
+MAINTAINER Philippe HUET <phuet@redhat.com>
+
+LABEL io.k8s.description="fedora:31 OpenShift debug toolkit as a Pod." \
+      io.k8s.display-name="fedora-debug-toolkit" \
+      io.openshift.tags="toolkit,debug,troubleshoot" \
+      io.openshift.non-scalable="true"
+
+RUN dnf install -y \
+      bpftool \
+      bcc \
+      gcc \
+      glibc-static \
+#      python3 \
+      bcc-tools \
+      kmod \
+      procps-ng \
+      strace \
+      cpio \
+  && \
+  dnf clean all -y
+
+RUN mkdir -p /opt/tools/capabilities_tracker
+WORKDIR /opt/tools/capabilities_tracker
+
+COPY ocipidinfo track-pid.sh track-containers.sh capabilities_tracker.json capable-hook capabilities-tracker .
+#COPY kernel-devel-entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh cleanup.sh /
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+CMD ["/bin/bash"]

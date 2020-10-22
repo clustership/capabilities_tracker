@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: capable
+  name: capable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capable
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: capable
+    spec:
+      shareProcessNamespace: true
+      containers:
+      - name: capable
+        image: quay.io/xymox/capable:fedora-0.5
+        command: ["/bin/sh"]
+        args: ["-c", "sleep infinity"]
+        volumeMounts:
+        - mountPath: /infos
+          name: infos
+          readOnly: true
+        - mountPath: /lib/modules
+          name: modules
+        - name: headers # mount the kernel headers required by bcc
+          mountPath: /usr/oldsrc
+          readOnly: true
+        securityContext:
+          privileged: true
+      - name: caps-debug
+        command: ["/bin/sh"]
+        args: ["-c", "while /bin/true ; do nice -n -20 echo 'bob' ; sleep 3; done" ]
+        image: quay.io/xymox/ubi8-debug-toolkit
+        resources: {}
+      nodeSelector:
+        kubernetes.io/hostname: compute-0
+      serviceAccount: capable
+      serviceAccountName: capable
+      volumes:
+      - name: modules
+        hostPath:
+          path: /lib/modules
+      - name: sys
+        hostPath:
+          path: /sys
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: headers
+        hostPath:
+          path: /usr/src
+      - name: infos
+        hostPath:
+          path: /var/tmp
+status: {}

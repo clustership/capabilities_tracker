@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: capsdump
+  name: capsdump
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: capsdump
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: capsdump
+      annotations:
+        io.containers.trace-capabilities: "true"
+    spec:
+      containers:
+      - name: caps-debug
+        command: ["/bin/sh"]
+        args: ["-c", "while /bin/true ; do nice -n -20 echo 'bob' ; sleep 3; done" ]
+        image: quay.io/xymox/ubi8-debug-toolkit
+        resources: {}
+      nodeSelector:
+        kubernetes.io/hostname: compute-0
+status: {}
