@@ -6,7 +6,7 @@ metadata:
     app: capsdump
   name: capsdump
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: capsdump
@@ -25,6 +25,4 @@ spec:
         args: ["-c", "while /bin/true ; do nice -n -20 echo 'bob' ; sleep 3; done" ]
         image: quay.io/xymox/ubi8-debug-toolkit
         resources: {}
-      nodeSelector:
-        kubernetes.io/hostname: compute-0
 status: {}

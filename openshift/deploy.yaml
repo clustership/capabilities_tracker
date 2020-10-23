@@ -37,18 +37,15 @@ spec:
     metadata:
       labels:
         app: capabilities-tracker
-      annotations:
-        capabilities-tracker.clustership.io/option-runc-hooks: "crio"
     spec:
       serviceAccount: capabilities-tracker
       hostPID: true
       hostNetwork: true
       containers:
       - name: capabilities-tracker
-        image: quay.io/xymox/capable:fedora-0.6
+        image: quay.io/djuran/capable:latest
         imagePullPolicy: Always
-        command: ["/bin/sh"]
-        args: ["-c", "sleep infinity"]
+        command: ["/entrypoint.sh"]
         lifecycle:
           preStop:
             exec:
