@@ -14,3 +14,11 @@ uninstall:
 	rm -f /usr/local/libexec/cgroupid
 	rm -f /usr/local/libexec/capable-hook
 	rm -f /usr/local/bin/capabilities-tracker
+
+.PHONY: ocipidinfo
+ocipidinfo:
+	$(MAKE) -C golang ocipidinfo
+
+.PHONY: container
+container: ocipidinfo
+	$(MAKE) -C container build
