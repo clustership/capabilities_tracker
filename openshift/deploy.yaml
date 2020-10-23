@@ -55,6 +55,8 @@ spec:
               command:
                 - "/cleanup.sh"
         env:
+          - name: RUNC_HOOK_MODE
+            value: crio
           - name: NODE_NAME
             valueFrom:
               fieldRef:
